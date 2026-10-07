@@ -1,0 +1,14 @@
+{
+     "cachorro":{
+        "nome": "Hulk",
+        "idade": 3,
+        "raca": "Labrador",
+        "vacinado": true,
+        "peso": 25.5,
+        "brinquedos": ["bola", "osso", "frisbee"],
+        "dono":{
+            "nome":"joão",
+            "telefone": "1199984830502"
+        }
+     }
+}
