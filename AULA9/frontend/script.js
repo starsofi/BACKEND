@@ -27,7 +27,7 @@ const API = "http://localhost:3000/api/cachorros";
 
 // função principal
 
-async function buscaCachorro(url){
+async function buscarCachorro(url){
     // adiciona a classe "loading"
     // normalmente usada para mostrar animação de carregamento
     dogArea.classList.add("loading");
@@ -48,8 +48,8 @@ async function buscaCachorro(url){
             // data - Objeto com os dados recebidos da API
             // .message - Propriedade que contém a mensagem ou URL
             breedName.textContent = data.message;
-            // remove a imagem
-            dogImagem.src = "";
+            // remove a imagem (corrigido o nome da variável de dogImagem para dogImage)
+            dogImage.src = "";
             // execução da função 
             return;
         }
@@ -65,9 +65,9 @@ dogImage.src = data.message;
 const partes = data.message.split("/");
 
 
-// pega a posição 5 do array
-// que corresponde ao nome da raça
-const raca = partes[5]
+// pega a posição da raça no array
+// (partes.length - 2 pega a penúltima posição com segurança)
+const raca = partes[partes.length - 2];
 
 
  //coloca a primeira letra maiúscula
@@ -100,3 +100,52 @@ breedName.textContent =
 // AÇÕES
 // ===================================
 
+// função que busca o cachorro aleatório
+function cachorroAleatorio(){
+    // chamar função principal
+    // passando a rota /aleatorio da API (corrigido a sintaxe da template string para ${API})
+    buscarCachorro(`${API}/aleatorio`);
+}
+// função que busca cachorro por raça
+function buscarPorRaca(){
+    // pegar o texto digitado no input
+    // Trim ele remove os espaços em branco {trim()} do inicio e do fim do texto
+    // (corrigido para .value ao invés de .ariaValueMax)
+    const raca = breedInput.value.trim().toLowerCase();
+
+    // verificar se o usuário digitou algo
+    if(!raca){
+        // se não digitou, mostra alerta
+        alert("Digite uma raça!")
+        // interrompendo a função
+        return;
+    }
+
+    // chamar a API passando a raça na URL
+    // exemplo: /api/cachorros/husky
+    buscarCachorro(`${API}/${raca}`)
+}
+
+// EVENTOS
+
+// QUANDO CLICAR NO BOTÃO ALEATÓRIO
+randomBtn.addEventListener("click", cachorroAleatorio)
+
+// quando clicar no botão "buscar"
+searchBtn.addEventListener("click", buscarPorRaca)
+
+// quando clicar na imagem do cachorro
+// carrega outro cachorro aleatório
+dogImage.addEventListener("click", cachorroAleatorio);
+
+// quando o usuário apertar o ENTER no input
+breedInput.addEventListener("keypress", (event) =>{
+    // verifica se a tecla pressionada foi enter
+    if(event.key === "Enter"){
+        // executa a busca por raça
+        buscarPorRaca();
+    }
+})
+
+// carrega ao abrir a página
+cachorroAleatorio();
